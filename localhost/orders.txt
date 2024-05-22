@@ -1,0 +1,21 @@
+Name: Ilyas
+Email: ilias.safin@gmail.com
+Number: +7082564128
+How Much: 2
+You Order: Pizza
+Address: Nurkent
+
+Name: Ilyas
+Email: ilias.safin@gmail.com
+Number: +7082564128
+How Much: 2
+You Order: Pizza
+Address: Nurkent
+
+Name: Qwerty
+Email: ggfgfg@gmail.com
+Number: +88005553535
+How Much: 5
+You Order: Raviolli
+Address: Qwertyuiop
+

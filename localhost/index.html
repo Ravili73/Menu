@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .cart {
+            background-color: #f2f2f2;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            position: fixed;
+            top: 50px;
+            right: 20px;
+            display: none;
+            z-index: 9999;
+        }
+
+        .cart h2 {
+            margin-top: 0;
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .cart-item img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .cart-item span {
+    margin-left: 10px;
+}
+
+        .toggle-cart-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 9999;
+        }
+
+        .cart-opened .toggle-cart-button {
+            display: none;
+        }
+
+        .cart-opened {
+            display: block;
+        }
+        #restaurantDescription {
+            margin-top: 50px;
+            margin-right: 100px; 
+        }
+        #restaurantImage{
+            margin-right: 73px;
+        }
+        .remove-button {
+            cursor: pointer;
+        }
+        .tenge-sign {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 500px;
+    max-width: 80%;
+    box-sizing: border-box;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content img {
+    max-width: 100%;
+    max-height: 150px;
+    width: auto; 
+    height: auto; 
+}
+
+.modal-trigger, .modal-add-to-cart-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    display: inline-block; 
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease; 
+}
+
+.modal-trigger:hover, .modal-add-to-cart-button:hover {
+    background-color: #45a049;
+}
+    </style>
+</head>
+<body>
+    <section id="Home">
+        <nav>
+            <div class="logo">
+                <a href="main.html">
+                    <img src="image/logoo.webp" alt="Logo">
+                </a>
+            </div>
+
+            <ul>
+                <li><a href="#Home">Home</a></li>
+                <li><a href="#Menu">Menu</a></li>
+                <li><a href="#Review">Review</a></li>
+                <li><a href="#Map">Map</a></li>
+                <li><a href="#Team">Team</a></li>
+            </ul>
+
+            <div class="icon"> 
+                <i class="fa-solid fa-cart-shopping" class="toggle-cart-button" onclick="toggleCart()"></i>
+                <a href="register.html"><i class="fa-solid fa-right-to-bracket"></i></a>
+                <p>Log in / Register</p>
+            </div>
+
+            
+
+        </nav>
+
+        <div class="main">
+
+            <div class="main">
+                <div class="men_text">
+                    <h1><span id="restaurantName"></span></h1>
+                    <h2><br>About us</h2>
+                    <p id="restaurantDescription"></p> 
+                </div>
+                <div class="main_image">
+                    <img id="restaurantImage" src=""  alt="Restaurant Image">
+                </div>
+            </div>
+
+
+    </section>
+
+
+
+    <!--Menu-->
+
+    <div class="menu" id="Menu">
+        <h1>Our<span>Menu</span></h1>
+
+        <div class="menu_box">
+            <div class="menu_card">
+
+                <div class="menu_image">
+                    <img id="menuimage" src="">
+                </div>
+
+                <div class="menu_info">
+                    <h2 id="menutextname"></h2>
+                    <p id="menutext"></p>
+                    <h3 id="menuprice"></h3>
+                    <button class="modal-trigger" data-target="#modal-1">Details</button>
+                    
+                </div>
+
+            </div> 
+            
+            <div class="menu_card">
+
+                <div class="menu_image">
+                    <img id="menuimage2" src="">
+                </div>
+
+                <div class="small_card">
+                    
+                </div>
+
+                <div class="menu_info">
+                    <h2 id="menutextname2"></h2>
+                    <p id="menutext2"></p>
+                    <h3 id="menuprice2"></h3>
+                    <button class="modal-trigger" data-target="#modal-1">Details</button>
+                    
+                </div>
+
+            </div> 
+
+            <div class="menu_card">
+
+                <div class="menu_image">
+                    <img id="menuimage3" src="">
+                </div>
+
+                <div class="small_card">
+                    
+                </div>
+
+                <div class="menu_info">
+                    <h2 id="menutextname3"></h2>
+                    <p id="menutext3"></p>
+                    <h3 id="menuprice3"></h3>
+                    <button class="modal-trigger" data-target="#modal-1">Details</button>
+                    
+                </div>
+
+            </div> 
+
+            <div class="menu_card">
+
+                <div class="menu_image">
+                    <img id="menuimage4" src="">
+                </div>
+
+                <div class="small_card">
+                    
+                </div>
+
+                <div class="menu_info">
+                    <h2 id="menutextname4"></h2>
+                    <p id="menutext4"></p>
+                    <h3 id="menuprice4"></h3>
+                    <button class="modal-trigger" data-target="#modal-1">Details</button>
+                    
+                </div>
+
+            </div> 
+
+            <div class="menu_card">
+
+                <div class="menu_image">
+                    <img id="menuimage5" src="">
+                </div>
+
+                <div class="small_card">
+                    
+                </div>
+
+                <div class="menu_info">
+                    <h2 id="menutextname5"></h2>
+                    <p id="menutext5"></p>
+                    <h3 id="menuprice5"></h3>
+                    <button class="modal-trigger" data-target="#modal-1">Details</button>
+                    
+                </div>
+
+            </div> 
+
+            <div class="menu_card">
+
+                <div class="menu_image">
+                    <img id="menuimage6" src="">
+                </div>
+
+                <div class="small_card">
+                    
+                </div>
+
+                <div class="menu_info">
+                    <h2 id="menutextname6"></h2>
+                    <p id="menutext6"></p>
+                    <h3 id="menuprice6"></h3>
+                    <button class="modal-trigger" data-target="#modal-1">Details</button>
+                    
+                </div>
+
+            </div> 
+
+            <div class="menu_card">
+
+                <div class="menu_image">
+                    <img id="menuimage7" src="">
+                </div>
+
+                <div class="small_card">
+                    
+                </div>
+
+                <div class="menu_info">
+                    <h2 id="menutextname7"></h2>
+                    <p id="menutext7"></p>
+                    <h3 id="menuprice7"></h3>
+                    <button class="modal-trigger" data-target="#modal-1">Details</button>
+                    
+                </div>
+
+            </div> 
+
+            <div class="menu_card">
+
+                <div class="menu_image">
+                    <img id="menuimage8" src="">
+                </div>
+
+                <div class="small_card">
+                    
+                </div>
+
+                <div class="menu_info">
+                    <h2 id="menutextname8"></h2>
+                    <p id="menutext8"></p>
+                    <h3 id="menuprice8"></h3>
+                    <button class="modal-trigger" data-target="#modal-1">Details</button>
+                    
+                </div>
+
+            </div> 
+            <div id="modal-1" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2 id="modalItemName"></h2>
+                    <img id="modalItemImage" src="">
+                    <p id="modalItemDescription"></p>
+                    <h3 id="modalItemPrice"></h3>
+                    <button class="modal-add-to-cart-button">Добавить в корзину</button>
+                    <input type="number" id="quantity" min="1" value="1">
+                </div>
+            </div>
+    </div>
+
+
+
+
+    <!--Review-->
+
+    <div class="review" id="Review">
+        <h1>Customer<span>Review</span></h1>
+
+        <div class="review_box">
+            <div class="review_card">
+
+                <div class="review_profile">
+                    <img src="image/review_1.png">
+                </div>
+
+                <div class="review_text">
+                    <h2 class="name">Asik</h2>
+
+                    <div class="review_icon">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                    </div>
+
+                    <p>
+                        Клубника бомба чесно говоря!
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="review_card">
+
+                <div class="review_profile">
+                    <img src="image/review_2.png">
+                </div>
+
+                <div class="review_text">
+                    <h2 class="name">Leps</h2>
+
+                    <div class="review_icon">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+
+                    <p>
+                        Я - счастливый, как никто!<br>
+                        Я счастливый лет уж сто.<br>
+                        Я - счастливый! Я не вру! <br>
+                        Так счастливым и уйду!<br>
+                        
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="review_card">
+
+                <div class="review_profile">
+                    <img src="image/review_3.png">
+                </div>
+
+                <div class="review_text">
+                    <h2 class="name">Anonimus 228</h2>
+
+                    <div class="review_icon">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                    </div>
+
+                    <p>
+                        С кайфом похавал, жалко кхинкали нет : (
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="review_card">
+
+                <div class="review_profile">
+                    <img src="image/review_4.png">
+                </div>
+
+                <div class="review_text">
+                    <h2 class="name">Rava</h2>
+
+                    <div class="review_icon">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        
+                    </div>
+
+                    <p>
+                        Заведение топ, но я не понял одного
+                        Где лагман и уткен чай?
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--Map-->
+
+
+    <div class="map-container" id="Map">
+        <h1>Our<span>Location</span></h1>
+        <div class="map-wrapper">
+            <iframe id="map" src="" width="1200" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+    
+
+    <!--Team-->
+
+    <div class="team" id="Team">
+        <h1>Our<span>Team</span></h1>
+
+        <div class="team_box">
+            <div class="profile">
+                <img src="image/chef1.jpg">
+
+                <div class="info">
+                    <h2 class="name">Chef Raviolli</h2>
+
+                    <div class="team_icon">
+                        <i class="fa-brands fa-facebook-f"></i>
+                        <i class="fa-brands fa-twitter"></i>
+                        <i class="fa-brands fa-instagram"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="profile">
+                <img src="image/chef2.jpg">
+
+                <div class="info">
+                    <h2 class="name">Chef Indira</h2>
+
+                    <div class="team_icon">
+                        <i class="fa-brands fa-facebook-f"></i>
+                        <i class="fa-brands fa-twitter"></i>
+                        <i class="fa-brands fa-instagram"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="profile">
+                <img src="image/chef3.jpg">
+
+                <div class="info">
+                    <h2 class="name">Chef Ilyas</h2>
+
+                    <div class="team_icon">
+                        <i class="fa-brands fa-facebook-f"></i>
+                        <i class="fa-brands fa-twitter"></i>
+                        <i class="fa-brands fa-instagram"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="profile">
+                <img src="image/chef4.jpg">
+
+                <div class="info">
+                    <h2 class="name">Chef Asik</h2>
+
+                    <div class="team_icon">
+                        <i class="fa-brands fa-facebook-f"></i>
+                        <i class="fa-brands fa-twitter"></i>
+                        <i class="fa-brands fa-instagram"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!--Footer-->
+
+    <footer>
+        <div class="footer_main">
+
+            <div class="footer_tag">
+                <h2>Location</h2>
+                <p>Kazakhstan</p>
+                
+            </div>
+
+            <div class="footer_tag">
+                <h2>Quick Link</h2>
+                <p>Home</p>
+                <p>About</p>
+                <p>Restaurants</p>
+            </div>
+
+            <div class="footer_tag">
+                <h2>Contact</h2>
+                <p>+7 777 777 79 79</p>
+                <p>sitemenu@gmail.com</p>
+            </div>
+
+            <div class="footer_tag">
+                <h2>Our Service</h2>
+                <p>Fast Delivery</p>
+                <p>24 x 7 Service</p>
+            </div>
+
+            <div class="footer_tag">
+                <h2>Follows</h2>
+                <i class="fa-brands fa-facebook-f"></i>
+                <i class="fa-brands fa-twitter"></i>
+                <i class="fa-brands fa-instagram"></i>
+                <i class="fa-brands fa-linkedin-in"></i>
+            </div>
+
+        </div>
+
+        <p class="end"><span><i class="fa-solid fa-face-grin"></i></span></p>
+
+    </footer>
+<!--Панель-->>
+
+<div class="cart" id="cart">
+    <h2>Корзина</h2>
+    <div class="cart-items"></div>
+    <div class="total-price">Общая сумма: <span id="total-price-amount">0</span><img src="image2/tenge-sign-svgrepo-com.svg" alt="тенге" class="tenge-sign"></div>
+</div>
+
+    <script>
+    function toggleCart() {
+        var cart = document.getElementById('cart');
+        cart.classList.toggle('cart-opened');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var menuItems = document.querySelectorAll('.menu_card');
+        var modal = document.getElementById('modal-1');
+        var modalContent = modal.querySelector('.modal-content');
+        var closeButton = modal.querySelector('.close');
+        var modalAddToCartButton = modal.querySelector('.modal-add-to-cart-button');
+
+        menuItems.forEach(function(menuItem) {
+            var detailsButton = menuItem.querySelector('.menu_info button.modal-trigger');
+
+            detailsButton.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                var name = menuItem.querySelector('.menu_info h2').textContent;
+                var text = menuItem.querySelector('.menu_info p').textContent;
+                var price = menuItem.querySelector('.menu_info h3').textContent;
+                var imageSrc = menuItem.querySelector('.menu_image img').src;
+
+                modalContent.querySelector('h2').textContent = name;
+                modalContent.querySelector('p').textContent = text;
+                modalContent.querySelector('h3').textContent = price;
+                modalContent.querySelector('img').src = imageSrc;
+
+
+                modalContent.querySelector('#quantity').value = 1;
+
+                modal.style.display = 'block';
+            });
+        });
+
+        closeButton.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        modalAddToCartButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var name = modalContent.querySelector('h2').textContent;
+            var price = parseFloat(modalContent.querySelector('h3').textContent.replace('₸', '').replace(/\s+/g, ''));
+            var quantity = parseInt(modalContent.querySelector('#quantity').value);
+
+            addToCart(name, price, quantity);
+
+            modal.style.display = 'none';
+        });
+
+        var removeButtons = document.querySelectorAll('.remove-button');
+        removeButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                var itemToRemove = event.target.closest('.cart-item');
+                itemToRemove.remove();
+                var itemPrice = parseFloat(itemToRemove.querySelector('span').textContent.split('-')[2].trim());
+                updateTotalPrice(-itemPrice);
+            });
+        });
+    });
+
+    function addToCart(name, price, quantity) {
+    var cartItemsContainer = document.querySelector('.cart-items');
+
+    var newItem = document.createElement('div');
+    newItem.classList.add('cart-item');
+    newItem.innerHTML = `
+        <img src="image/${name}.jpg" alt="${name}"> <!-- .jpg вместо webp -->
+        <span>${name} - ${quantity} шт. - ${price * quantity} тенге</span>
+        <span class="remove-button"><img src="image/cross-small-svgrepo-com.svg" alt="Remove"></span>
+    `;
+
+    cartItemsContainer.appendChild(newItem);
+
+    updateTotalPrice(price * quantity); 
+
+    newItem.querySelector('.remove-button img').addEventListener('click', function(event) {
+        var itemToRemove = event.target.closest('.cart-item');
+        itemToRemove.remove();
+        var itemPrice = parseFloat(itemToRemove.querySelector('span').textContent.split('-')[2].trim());
+        updateTotalPrice(-itemPrice);
+    });
+}
+    function updateTotalPrice(itemPrice) {
+        var totalPriceSpan = document.getElementById('total-price-amount');
+        var currentTotalPrice = parseFloat(totalPriceSpan.textContent.replace(' тенге', ''));
+        var newTotalPrice = currentTotalPrice + itemPrice;
+        totalPriceSpan.textContent = newTotalPrice.toFixed(2) + " тенге";
+    }
+
+        // Restaurant data
+        document.addEventListener('DOMContentLoaded', function() {
+            const restaurants = [
+        { 
+            name: 'index', 
+            title: 'Primo Italiano', 
+            title2:'Italiano',
+            image: 'image/pizza1.png', 
+            description: 'First of all, the appeal of Primo Italiano lies in its authentic aesthetics. The restaurant creates an atmosphere of traditional Italy with the help of a unique interior design, where every detail, from furniture to decor, is carefully selected to recreate an authentic Italian setting. This allows visitors to feel like in a real Italian restaurant without leaving Almaty. In addition, Primo Italiano is known for its warmth and coziness. The staff creates a friendly and welcoming atmosphere in which every guest feels welcome and cared for. This makes visiting the restaurant a pleasant and memorable experience for anyone who chooses Primo Italiano for lunch or dinner. But, of course, the main advantage of Primo Italiano lies in its delicious cuisine. The dishes are prepared according to authentic Italian cooking recipes, using only fresh and high-quality ingredients. Each dish served in the restaurant is a real culinary work of art that pleases both the taste buds and the eyes. Thus, the choice of Primo Italiano as a place for lunch or dinner is justified by its aesthetics, comfort, high-quality cuisine and the status of the first Italian restaurant in Almaty.', 
+            
+            menuimage:'image/buger.jpg',
+            menutextname:'Buger',
+            menutext:'A juicy grilled patty, often with cheese, vegetables, and sauces, sandwiched between two bun halves. Ingredients: Beef, chicken, or fish, vegetables, cheese, sauces, bun.',
+            menuprice:'4500',
+            menuimage2:'image/pasta.jpg',
+            menutextname2:'Pasta',
+            menutext2:'An Italian dish made from cooked dough, usually served with various sauces or fillings. Ingredients: Flour, eggs, sauces (tomato, cream, pesto, etc.), vegetables, cheese, meat or seafood.',
+            menuprice2:'12356',
+            menuimage3:'image/lasagna.webp',
+            menutextname3:'Lasagna',
+            menutext3:'An Italian dish consisting of layers of pasta sheets, meat (usually beef), cheese, and sauce. Ingredients: Lasagna sheets, Bolognese meat sauce, béchamel sauce, cheese.',
+            menuprice3:'6000',
+            menuimage4:'image/tallatelle.webp',
+            menutextname4:'Tagliatelle Bolognese',
+            menutext4:'An Italian dish of long ribbon-shaped pasta seasoned with meat Bolognese sauce. Ingredients: Tagliatelle pasta dough (egg pasta), Bolognese meat sauce, Parmesan.',
+            menuprice4:'2222',
+            menuimage5:'image/pizza.jpg',
+            menutextname5:'Pizza',
+            menutext5:'An Italian dish consisting of thin or thick round dough topped with cheese, and various toppings. Ingredients: Dough, tomato sauce, mozzarella, olives, mushrooms.',
+            menuprice5:'150',
+            menuimage6:'image/raviolli.webp',
+            menutextname6:'Raviolli',
+            menutext6:'Italian dumplings, usually square-shaped, filled with a filling typically made of meat, fish, or cheese. Ingredients: Dough, filling (meat, cheese, vegetables), sauce.',
+            menuprice6:'200',
+            menuimage7:'image/brusketta.webp',
+            menutextname7:'Brusketta',
+            menutext7:'An Italian appetizer consisting of toasted bread, usually with garlic, tomatoes, basil, and other ingredients. Ingredients: Bread, garlic, olive oil, tomatoes, basil.',
+            menuprice7:'2000',
+            menuimage8:'image/biryani.webp',
+            menutextname8:'Biryani',
+            menutext8:'A traditional Indian rice dish prepared with meat, aromatic spices, and sometimes with nuts and dried fruits. Ingredients: Rice, meat, spices, nuts, dried fruits.',
+            menuprice8:'10000',
+            map:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1454.414829993548!2d76.88167637121065!3d43.192084897448034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3883694175845f83%3A0x85a8f9cb7d32a577!2sPrimo%20Italiano!5e0!3m2!1sru!2skz!4v1713712912401!5m2!1sru!2skz'        
+        },
+        { 
+            name: 'index2', 
+            title: 'Olivier', 
+            image: 'image/france1.png', 
+            description: 'The Olivier Restaurant in Almaty boasts a stylish interior with modern art, offering a welcoming atmosphere for guests. While the name might suggest French cuisine, Olivier actually focuses on a delicious fusion of European, Russian, and Asian dishes with a creative twist from their chef. They even have a charming summer terrace with a view, perfect for enjoying a meal outdoors.',
+            menuimage:'image2/Salmon.jpg',
+            menutextname:'Salmon',
+            menutext:'There should be something written here, but I have no imagination.',
+            menuprice:'4564',
+            menuimage2: 'image2/Tuna.jpg',
+            menutextname2:'Tuna',
+            menutext2:'Tuya Tuya Tuya what is Tuya? Tuya Tuya Tuya....',
+            menuprice2:'1250',
+            menuimage3:'image2/Unagi.jpg',
+            menutextname3:'Unagi',
+            menutext3:'Unagi? Unagi maki? Naruto?',
+            menuprice3:'65423',
+            menuimage4:'image2/Cremebrulee.jpg',
+            menutextname4:'Creme Brulee',
+            menutext4:'There is such a character in One Piece',
+            menuprice4:'1000000',
+            menuimage5:'image2/pizza.jpg',
+            menutextname5:'Pizza',
+            menutext5:'Even the French restaurant has pizza',
+            menuprice5:'879879',
+            menuimage6:'image2/Macaroons.jpg',
+            menutextname6:'Macaroons',
+            menutext6:'Сonfection, a biscuit cookie made, as a rule, from almonds',
+            menuprice6:'2993979',
+            menuimage7:'image2/Ratatouille.jpg',
+            menutextname7:'Ratatouille',
+            menutext7:'Ratatouille is a dish and the mouse next to it is Remy',
+            menuprice7:'9000',
+            menuimage8:'image2/Croissant.jpg',
+            menutextname8:'Croissant',
+            menutext8:'Well, what about French cuisine without its legendary croissant dish (you can take the syrup for free)',
+            menuprice8:'999',
+            map:'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d726.576500637865!2d76.9476408!3d43.2450082!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38836fc99da928af%3A0x4ce721032ac0ee8!2z0KLQtdC80LjRgNGP0LfQtdCy0LAg0YDQvtC30YvQsdCw0LrQuNC10LLQsA!5e0!3m2!1sru!2skz!4v1714563544437!5m2!1sru!2skz'
+        },
+    ];
+
+    const params = new URLSearchParams(window.location.search);
+    const restaurantName = params.get('restaurant');
+
+    for (const restaurant of restaurants) {
+        if (restaurant.name === restaurantName) {
+            document.getElementById('restaurantImage').src = restaurant.image;
+            document.getElementById('restaurantName').textContent = restaurant.title;
+            document.getElementById('restaurantDescription').textContent = restaurant.description;
+            document.getElementById('menuimage').src = restaurant.menuimage;
+            document.getElementById('menutextname').textContent = restaurant.menutextname;
+            document.getElementById('menutext').textContent = restaurant.menutext;
+            document.getElementById('menuprice').textContent = restaurant.menuprice;
+            document.getElementById('menuimage2').src = restaurant.menuimage2;
+            document.getElementById('menutextname2').textContent = restaurant.menutextname2;
+            document.getElementById('menutext2').textContent = restaurant.menutext2;
+            document.getElementById('menuprice2').textContent = restaurant.menuprice2;
+            document.getElementById('menuimage3').src = restaurant.menuimage3;
+            document.getElementById('menutextname3').textContent = restaurant.menutextname3;
+            document.getElementById('menutext3').textContent = restaurant.menutext3;
+            document.getElementById('menuprice3').textContent = restaurant.menuprice3;
+            document.getElementById('menuimage4').src = restaurant.menuimage4;
+            document.getElementById('menutextname4').textContent = restaurant.menutextname4;
+            document.getElementById('menutext4').textContent = restaurant.menutext4;
+            document.getElementById('menuprice4').textContent = restaurant.menuprice4;
+            document.getElementById('menuimage5').src = restaurant.menuimage5;
+            document.getElementById('menutextname5').textContent = restaurant.menutextname5;
+            document.getElementById('menutext5').textContent = restaurant.menutext5;
+            document.getElementById('menuprice5').textContent = restaurant.menuprice5;
+            document.getElementById('menuimage6').src = restaurant.menuimage6;
+            document.getElementById('menutextname6').textContent = restaurant.menutextname6;
+            document.getElementById('menutext6').textContent = restaurant.menutext6;
+            document.getElementById('menuprice6').textContent = restaurant.menuprice6;
+            document.getElementById('menuimage7').src = restaurant.menuimage7;
+            document.getElementById('menutextname7').textContent = restaurant.menutextname7;
+            document.getElementById('menutext7').textContent = restaurant.menutext7;
+            document.getElementById('menuprice7').textContent = restaurant.menuprice7;
+            document.getElementById('menuimage8').src = restaurant.menuimage8;
+            document.getElementById('menutextname8').textContent = restaurant.menutextname8;
+            document.getElementById('menutext8').textContent = restaurant.menutext8;
+            document.getElementById('menuprice8').textContent = restaurant.menuprice8;
+            document.getElementById('map').src = restaurant.map;
+            break; 
+        }
+    }
+});
+    </script>
+    
+</body>
+</html>
